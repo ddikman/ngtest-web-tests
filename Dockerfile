@@ -9,4 +9,4 @@ WORKDIR /app
 # Copy the project files
 COPY . /app
 
-RUN gradle test
+CMD [ "gradle", "test" ]
