@@ -5,7 +5,10 @@ import org.testng.annotations.*;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.TakesScreenshot;
@@ -18,13 +21,22 @@ public class AppTest {
 
   private WebDriver driver;
 
-  @BeforeSuite(alwaysRun = true)
-  public void setupBeforeSuite(ITestContext context) {
+  @BeforeTest(alwaysRun = true)
+  public void setupBeforeTest(ITestContext context) {
     ChromeOptions options = new ChromeOptions();
     options.addArguments("--headless");
     options.addArguments("--no-sandbox");
     options.addArguments("--disable-dev-shm-usage");
     driver = new ChromeDriver(options);
+  }
+
+  @AfterTest(alwaysRun = true)
+  public void setupAfterTest(ITestContext context) {
+    if (driver != null) {
+        // Just as a helper to troubleshoot the test failure, take a screenshot
+        takeScreenshot(context.getName());
+        driver.quit();
+    }
   }
 
   private void takeScreenshot(String filename) {
@@ -36,13 +48,8 @@ public class AppTest {
     }
   }
 
-  @AfterSuite(alwaysRun = true)
-  public void setupAfterSuite(ITestContext context) {
-    if (driver != null) {
-        // Just as a helper to troubleshoot the test failure, take a screenshot
-        takeScreenshot(context.getName());
-        driver.quit();
-    }
+  private WebElement getSearchInput() {
+    return driver.findElement(By.name("q"));
   }
 
   @Test
@@ -50,23 +57,23 @@ public class AppTest {
     driver.get("https://www.google.com");
   }
 
-  @Parameters("url")
+  @Parameters("expectedUrl")
   @Test
-  public void navigateTo(String url) {
-    driver.navigate().to(url);
+  public void expectUrl(String expectedUrl) {    
+    Assert.assertEquals(driver.getCurrentUrl(), expectedUrl);
   }
   
   @Parameters("keyword")
   @Test
   public void enterSearch(String keyword) {
-    WebElement element = driver.findElement(By.name("q"));
-    element.sendKeys(keyword);
-    element.sendKeys("\n");
+    getSearchInput().sendKeys(keyword);
   }
 
   @Test
-  public void tapSearch() {
-    driver.findElement(By.name("btnI")).click();
+  public void tapLucky() {
+    WebDriverWait wait = new WebDriverWait(driver, 10);
+    WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.name("btnI")));
+    element.click();
   }
 
   @Parameters("expectedTitle")
@@ -80,5 +87,6 @@ public class AppTest {
   @Test
   public void searchFor(String keyword) {
     enterSearch(keyword);
+    getSearchInput().sendKeys(Keys.ENTER);
   }
 }

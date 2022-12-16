@@ -1,0 +1,29 @@
+<suite name="Test features">
+  <test name="Searching a term will generate results" preserve-order="true">
+    <parameter name="keyword" value="greycastle se"/>  
+    <parameter name="expectedTitle" value="Greycastle - Greycastle"/>
+    <classes>
+      <class name="AppTest">
+        <methods>
+          <include name="gotoGoogle" />
+          <include name="searchFor" />
+          <include name="theFirstMatchIs" />
+        </methods>
+      </class>
+    </classes>
+  </test>
+  <test name="The lucky feature will navigate straight to the first match" preserve-order="true">
+    <parameter name="keyword" value="greycastle se"/>  
+    <parameter name="expectedUrl" value="https://www.greycastle.se/"/>
+    <classes>
+      <class name="AppTest">
+        <methods>
+          <include name="gotoGoogle" />
+          <include name="enterSearch" />
+          <include name="tapLucky" />
+          <include name="expectUrl" />
+        </methods>
+      </class>
+    </classes>
+  </test>
+</suite>

@@ -21,7 +21,7 @@ test {
 
     // Use TestNG for unit tests
     useTestNG() {
-        suites "suites/suite1.xml"
+        suites "suites/features.xml"
     }
 }
 
