@@ -2,6 +2,7 @@
 
 This project is a small example to show how web testing can be automated with Selenium and TestNG.
 
+![Example of report](./report-example.png)
 
 ## Run
 
@@ -16,6 +17,8 @@ open build/reports/tests/test/index.html
 If running on windows the volume mount and paths will need to be updated.
 
 Before tearing down each test, a screenshot is saved with the test name in `build/test-results/test/` which can help troubleshooting.
+
+![Example of running the docker in console](./console-example.png)
 
 ## Project structure
 
